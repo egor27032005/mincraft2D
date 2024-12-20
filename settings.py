@@ -1,0 +1,19 @@
+class Settings:
+    BLOCK_SIZE = 80
+    DROPPED_BLOCK_SIZE=25
+    HEIGHT = BLOCK_SIZE * 10 - 60
+    WIDTH = BLOCK_SIZE * 15
+    CELL_SIZE=75
+
+    HEIGHT_BLOCKS = 50
+    WIDTH_BLOCKS = 4096
+
+    PLAYER_VEL = 5
+    CUBE_SIZE = 80
+    GRAVITY = 1
+    GRAVITY_BLOCK = 3
+
+    PLAYER_START_X = 0
+    PLAYER_START_Y = -2
+
+    FPS = 60

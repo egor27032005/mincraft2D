@@ -25,12 +25,10 @@ class Ground_Matrix:
         return '\n'.join([' '.join(map(str, row)) for row in self.matrix])
 
 
-
-# Пример использования
 if __name__ == "__main__":
     height = 7
     width = 7
     matrix = Ground_Matrix(width, height)
-    # matrix[0, -1] = 1
-    matrix[-3, 0] = 1
+    matrix[0, 0] = 1
+
     print(matrix)

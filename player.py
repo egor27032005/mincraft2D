@@ -21,10 +21,8 @@ def load_sprite_sheets(dir1, dir2, width, height, direction=False):
     images = [f for f in listdir(path) if isfile(join(path, f))]
 
     all_sprites = {}
-
     for image in images:
         sprite_sheet = pygame.image.load(join(path, image)).convert_alpha()
-
         sprites = []
         for i in range(sprite_sheet.get_width() // width):
             surface = pygame.Surface((width, height), pygame.SRCALPHA, 32)
@@ -41,7 +39,7 @@ def load_sprite_sheets(dir1, dir2, width, height, direction=False):
     return all_sprites
 
 class Player(pygame.sprite.Sprite):
-    SPRITES = load_sprite_sheets("MainCharacters", "MaskDude", 32, 32, True)
+    SPRITES = load_sprite_sheets("MainCharacters", "NinjaFrog", 32, 32, True)
     ANIMATION_DELAY = 3
 
     def __init__(self, x, y, width, height):
@@ -73,9 +71,9 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += dx
         self.rect.y += dy
         y=self.y_coord
-        self.y_coord = int(self.rect.y / settings.BLOCK_SIZE)  # Приведение к целому числу
+        self.y_coord = int(self.rect.y / settings.BLOCK_SIZE)
         self.y_shift = int(self.rect.y / settings.BLOCK_SIZE)-self.y+1
-        self.x_coord = int(self.rect.x / settings.BLOCK_SIZE)  # Приведение к целому числу
+        self.x_coord = int(self.rect.x / settings.BLOCK_SIZE)
 
     def make_hit(self):
         self.hit = True

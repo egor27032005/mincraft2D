@@ -1,6 +1,8 @@
-from current_inventory import CurrentInventory
+from django.conf.locale import tk
+from current_inventory import*
 from cursor import *
 from ground import Ground
+from ground_matrix import Ground_Matrix
 from player import *
 from water import *
 from main_screan import *
@@ -13,34 +15,24 @@ def get_background(name):
     image = pygame.image.load(join("assets", "Background", name))
     _, _, width, height = image.get_rect()
     tiles = []
-
     for i in range(settings.WIDTH // width + 1):
         for j in range(settings.HEIGHT // height + 1):
             pos = (i * width, j * height)
             tiles.append(pos)
-
     return tiles, image
 
-
-def draw(window, background, bg_image, player, blocks, water, offset_x, offset_y, cursor, dropped_blocks, inventory,
-         index,
-         collected_blocks):
+def draw(window, background, bg_image, player, blocks, water, offset_x, offset_y, cursor, dropped_blocks, inventory):
     for tile in background:
         window.blit(bg_image, tile)
-    # draw_water
-    # for obj in objects:
-    #     obj.draw(window, offset_x, offset_y)
     for wat in water:
         wat.draw(window, offset_x, offset_y)
     for bl in blocks:
         bl.draw(window, offset_x, offset_y)
     for drObj in dropped_blocks:
         drObj.draw(window, offset_x, offset_y)
-
     player.draw(window, offset_x, offset_y)
     cursor.draw(window, offset_x, offset_y)
-    inventory.draw(window, index, collected_blocks)
-
+    inventory.draw(window)
     pygame.display.update()
 
 
@@ -117,7 +109,6 @@ def block_under_cursor(cursor, ms, time, player):
 def check_block(cursor, ms, player):
     x, y = conversion(cursor, player)
     index = ms.matrix[x, y]
-    # return index != 0 and index != 1
     return index > 20
 
 
@@ -126,12 +117,10 @@ def conversion(cursor, player):
     y = cursor.y_coord
     return x, -int(y) + settings.HEIGHT_BLOCKS
 
-
 def get_coord(matr, x, y=0):
     for i in range(y, settings.HEIGHT_BLOCKS):
         if matr[x, i] != 0:
             return i
-
 
 def check_collisions(player, dropped_blocks, collected_blocks):
     for dr_block in dropped_blocks[:]:
@@ -142,23 +131,18 @@ def check_collisions(player, dropped_blocks, collected_blocks):
                 collected_blocks[dr_block.name] = 1
             dropped_blocks.remove(dr_block)
     return collected_blocks
+def update_inventory(inventory,collected_blocks):
+    inventory.update(collected_blocks)
 
 
-def put_block(cursor, ms, index, collected_blocks, player):
+def put_block(cursor, ms, player,inventory):
     index_of_image = {"dirt.png": 22, "bedrock.png": 23, "stone.png": 24, "grass.png": 25}
     x, y = conversion(cursor, player)
     ms_index = ms.matrix[x, y]
-    if index <= len(collected_blocks):
-        if ms_index <20:
-            a = list(collected_blocks)[index - 1]
-            collected_blocks[a] -= 1
-            if (collected_blocks[a] == 0):
-                collected_blocks.pop(a, None)
-            ms.matrix[x, y] = index_of_image[a]
-            ms.delete_block()
-def update_water(water,blocks):
-    xy_water=[(bl.x,bl.y) for bl in water]
-    xy_blocks=[(bl.x,bl.y) for bl in water]
+    if(inventory.put() and ms_index<20):
+        ms.matrix[x, y] = index_of_image[inventory.put_block()]
+        ms.delete_block()
+
 
 def main(window):
     clock = pygame.time.Clock()
@@ -168,7 +152,7 @@ def main(window):
     ms = Main_Screen(matr)
     player_y_coord = get_coord(matr, settings.PLAYER_START_X)
     player = Player(settings.PLAYER_START_X, player_y_coord, 80, 80)
-    inventory = CurrentInventory()
+    inventory = CurrentInventor()
     mouse_x = 0
     mouse_y = 0
     run = True
@@ -176,7 +160,7 @@ def main(window):
     press_start_time = 0
     dropped_blocks = []
     collected_blocks = {}
-    index = 1
+    last_update_time = pygame.time.get_ticks()
     while run:
         clock.tick(settings.FPS)
         cursor = Cursor(mouse_x, mouse_y, 0, player, matr)
@@ -193,21 +177,16 @@ def main(window):
                     player.jump()
                 if event.key == pygame.K_ESCAPE:
                     run = False
-                # if event.key == pygame.K_e:  # Проверка нажатия клавиши "E"
-                #     window_open = not window_open  # Переключаем состояние окна
-                #     if window_open:
-                #         open_new_window()  # Функция для открытия нового окна
-                #     else:
-                #         close_new_window()
                 if pygame.K_0 <= event.key <= pygame.K_9:
                     index = event.key - pygame.K_0
+                    inventory.select_index=index
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     mouse_pressed = True
                     press_start_time = pygame.time.get_ticks()
-                elif event.button == 3:  # Правый клик мыши
-                    put_block(cursor, ms, index, collected_blocks, player)
+                elif event.button == 3:
+                    put_block(cursor, ms, player,inventory)
 
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
@@ -217,13 +196,19 @@ def main(window):
         blocks = [x for x in objects if not x.name.startswith("water")]
         blocks = [*blocks]
         water = [*water]
+        current_time = pygame.time.get_ticks()
+
+        if current_time - last_update_time >= 1000:
+            ms.update_water(player.x_coord)
+            last_update_time = current_time
         player.loop(settings.FPS)
         handle_move(player, blocks)
         update_drop(dropped_blocks, blocks, matr)
         offset_x = player.rect.centerx - settings.WIDTH // 2
         offset_y = player.rect.centery - settings.HEIGHT // 2
         check_collisions(player, dropped_blocks, collected_blocks)
-        update_water(water,blocks)
+        update_inventory(inventory, collected_blocks)
+        collected_blocks={}
         if mouse_pressed and check_block(cursor, ms, player):
             press_duration = pygame.time.get_ticks() - press_start_time
             cursor = Cursor(mouse_x, mouse_y, press_duration, player, matr)
@@ -232,12 +217,10 @@ def main(window):
                 dropped_blocks.append(bool_cursor)
         else:
             cursor = Cursor(mouse_x, mouse_y, 0, player, matr)
-        draw(window, background, bg_image, player, blocks, water, offset_x, offset_y, cursor, dropped_blocks, inventory,
-             index, collected_blocks)
+        draw(window, background, bg_image, player, blocks, water, offset_x, offset_y, cursor, dropped_blocks, inventory)
 
     pygame.quit()
     quit()
-
 
 if __name__ == "__main__":
     main(window)

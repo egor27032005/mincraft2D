@@ -49,10 +49,3 @@ class Block(Object):
         self.y = y
         self.name=name
 
-def blocks_near_player(x,y,objects):
-    near_objects=[object for object in objects if ((object.x**2-x**2)+(object.y**2-y**2))<40]
-    print(len(near_objects))
-    return near_objects
-
-def full_block_on_screen():
-    return 1

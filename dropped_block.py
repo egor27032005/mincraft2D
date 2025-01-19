@@ -21,7 +21,6 @@ def get_drop_block(name):
     return pygame.transform.scale2x(surface)
 
 
-
 class DroppedBlock(Object):
     blocks = {"bedrock.png": 1, "turf.png": 0.3, "stone.png": 0.6, "grass.png": 0.3, "dirt.png": 0.4}
     index_of_image = {11: "water_1.png",12: "water_2.png", 13: "water_3.png",14: "water_4.png",15: "water_5.png",16: "water_6.png",17: "water_7.png",18: "water_8.png",22: "dirt.png", 23: "bedrock.png", 24: "stone.png", 25: "grass.png"}

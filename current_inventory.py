@@ -61,16 +61,22 @@ class Slot:
         if not self.empty:
             window.blit(self.image, (self.x, self.y))
             window.blit(self.image_block, (self.x + 13, self.y + 12))
-            text_surface = self.font.render(str(self.count), True, (255, 255, 255))
+            text_surface = self.font.render(str(self.count), False, (255, 255, 255))
             text_position = (self.x + 53, self.y + 42)
             window.blit(text_surface, text_position)
 
         else:
             window.blit(self.image, (self.x, self.y))
 
+class Drop:
+    def __init__(self):
+        self.my_drop=[[[], []] for i in range(9)]
+        self.internal_drop=[[[], []] for i in range(27)]
+
 
 class CurrentInventor:
-    def __init__(self):
+    def __init__(self,drop):
+        self.drop=drop
         self.cell_size = settings.CELL_SIZE + 3
         self.position = (0, settings.HEIGHT - self.cell_size)
         self.slots = [Slot(self.get_slot_coord_x(i), self.get_slot_coord_y()) for i in range(10)]
@@ -88,6 +94,14 @@ class CurrentInventor:
             else:
                 self.slots[self.first_free()].completion(el, current_inventory[el])
                 self.blocks = [self.slots[i].block for i in range(10)]
+        self.completion_drop()
+    def completion_drop(self):
+        for i in range(9):
+            if self.slots[i].empty:
+                self.drop.my_drop[i]=0,0
+            else:self.drop.my_drop[i]=self.slots[i].image_block,self.slots[i].count
+
+
 
     def put(self):
         if (not self.slots[self.select_index - 1].empty):

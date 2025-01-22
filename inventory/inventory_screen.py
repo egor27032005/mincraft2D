@@ -56,7 +56,7 @@ class InventoryScreen:
                 for sprite in self.all_sprites:
                     if sprite.rect.collidepoint(event.pos):
                         sprite.moving = not sprite.moving
-                        if self.current_slot()!=None and sprite.moving==True:
+                        if self.current_slot()!=None:
                             sprite.rect.x=self.current_slot()[0]+13
                             sprite.rect.y=self.current_slot()[1]+13
                             # self.cur_slot.update(sprite.name,sprite.count)

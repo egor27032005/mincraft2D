@@ -1,8 +1,7 @@
-from os import listdir
-from os.path import isfile, join
+from os.path import join
 import pygame
 
-from settings import Settings
+from main_functions.settings import Settings
 
 pygame.init()
 
@@ -12,7 +11,7 @@ settings = Settings()
 
 
 def get_block(name):
-    path = join("assets", "Terrain", name)
+    path = join("../assets", "Terrain", name)
     image = pygame.image.load(path).convert_alpha()
     surface = pygame.Surface((settings.BLOCK_SIZE, settings.BLOCK_SIZE), pygame.SRCALPHA, 32)
     rect = pygame.Rect(0, 0, settings.BLOCK_SIZE, settings.BLOCK_SIZE)

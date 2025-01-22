@@ -1,6 +1,6 @@
-from current_inventory import Drop
-from inventory_screen import InventoryScreen
-from main_screan import Main_Screen
+from inventory.current_inventory import Drop
+from inventory.inventory_screen import InventoryScreen
+from games.main_screan import Main_Screen
 import pygame as pg
 
 class Game:
@@ -20,7 +20,7 @@ class Game:
                         self.inventory_screen.update_slots()
                         self.stats.game_state = 2
             case 2:
-                # self.inventory_screen.check_event(event)
+                self.inventory_screen.check_event(event)
                 if event.type == pg.MOUSEBUTTONDOWN:
                     pass
                 elif event.type == pg.KEYDOWN:

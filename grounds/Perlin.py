@@ -1,5 +1,5 @@
 import random
-from ground_matrix import Ground_Matrix
+
 
 class Vector():
     def __init__(self, x, slant, length, height):
@@ -56,11 +56,11 @@ class PerlinNoiseFactory:
             lerps.append(ler)
         return sum(lerps, [])
 
-    def pool_matrix(self):
-        for point in self.lerps[1:-1]:
-            matrix[point[0], point[1] + matrix.height // 2] = 22
-        return matrix
+    # def pool_matrix(self):
+    #     for point in self.lerps[1:-1]:
+    #         matrix[point[0], point[1] + matrix.height // 2] = 22
+    #     return matrix
 
 
-matrix = Ground_Matrix(512, 150)
-x = PerlinNoiseFactory(matrix, 64)
+# matrix = Ground_Matrix(512, 150)
+# x = PerlinNoiseFactory(matrix, 64)

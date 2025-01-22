@@ -1,5 +1,5 @@
 import pygame
-from game_function import GameFunctions
+from main_functions.game_function import GameFunctions
 from settings import Settings
 
 

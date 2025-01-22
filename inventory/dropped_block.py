@@ -1,9 +1,8 @@
-from os import listdir
-from os.path import isfile, join
+from os.path import join
 import pygame
 
-from block import Object
-from settings import Settings
+from grounds.block import Object
+from main_functions.settings import Settings
 
 pygame.init()
 
@@ -13,7 +12,7 @@ settings = Settings()
 
 
 def get_drop_block(name):
-    path = join("assets", "Drop", name)
+    path = join("../assets", "Drop", name)
     image = pygame.image.load(path).convert_alpha()
     surface = pygame.Surface((settings.DROPPED_BLOCK_SIZE, settings.DROPPED_BLOCK_SIZE), pygame.SRCALPHA, 32)
     rect = pygame.Rect(0, 0, settings.DROPPED_BLOCK_SIZE, settings.DROPPED_BLOCK_SIZE)

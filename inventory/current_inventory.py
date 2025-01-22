@@ -1,9 +1,7 @@
-from os import listdir
-from os.path import isfile, join
-import sys
+from os.path import join
 import pygame
 
-from settings import Settings
+from main_functions.settings import Settings
 
 pygame.init()
 
@@ -13,7 +11,7 @@ settings = Settings()
 
 
 def get_drop_block(name):
-    path = join("assets", "Drop", name)
+    path = join("../assets", "Drop", name)
     image = pygame.image.load(path).convert_alpha()
     surface = pygame.Surface((settings.DROPPED_BLOCK_SIZE, settings.DROPPED_BLOCK_SIZE), pygame.SRCALPHA, 32)
     rect = pygame.Rect(0, 0, settings.DROPPED_BLOCK_SIZE, settings.DROPPED_BLOCK_SIZE)
@@ -25,7 +23,7 @@ class Slot:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.image = pygame.image.load("assets/images/inventory_tile.png")
+        self.image = pygame.image.load("../assets/images/inventory_tile.png")
         self.image = pygame.transform.scale(self.image, (Settings.CELL_SIZE, Settings.CELL_SIZE))
         self.empty = True
         self.count = 0
@@ -70,8 +68,8 @@ class Slot:
 
 class Drop:
     def __init__(self):
-        self.my_drop=[[[], []] for i in range(9)]
-        self.internal_drop=[[[], []] for i in range(27)]
+        self.my_drop=[[[], []] for _ in range(9)]
+        self.internal_drop=[[[], []] for _ in range(27)]
 
 
 class CurrentInventor:
@@ -80,7 +78,7 @@ class CurrentInventor:
         self.cell_size = settings.CELL_SIZE + 3
         self.position = (0, settings.HEIGHT - self.cell_size)
         self.slots = [Slot(self.get_slot_coord_x(i), self.get_slot_coord_y()) for i in range(10)]
-        self.select = pygame.image.load("assets/images/selected_item.png")
+        self.select = pygame.image.load("../assets/images/selected_item.png")
         self.select = pygame.transform.scale(self.select, (Settings.CELL_SIZE + 7, Settings.CELL_SIZE + 7))
         self.select_index = 1
         self.blocks = [self.slots[i].block for i in range(10)]
@@ -99,7 +97,7 @@ class CurrentInventor:
         for i in range(9):
             if self.slots[i].empty:
                 self.drop.my_drop[i]=0,0
-            else:self.drop.my_drop[i]=self.slots[i].image_block,self.slots[i].count
+            else:self.drop.my_drop[i]=self.slots[i].block,self.slots[i].count
 
 
 

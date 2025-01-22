@@ -1,13 +1,11 @@
-import pygame
-import tkinter as tk
-from current_inventory import *
-from cursor import *
-from ground import Ground
-from current_screen import *
-from ground_matrix import Ground_Matrix
-from player import *
-from water import *
-from dropped_block import *
+import grounds.ground
+from inventory.current_inventory import *
+from games.cursor import *
+from grounds.ground import Ground
+from games.current_screen import *
+from games.player import *
+from grounds.water import *
+from inventory.dropped_block import *
 
 settings = Settings()
 
@@ -17,7 +15,7 @@ class Main_Screen:
         self.window = window
         self.clock = pygame.time.Clock()
         self.background, self.bg_image = self.get_background("sky.png")
-        self.ground = Ground()
+        self.ground = grounds.ground.Ground()
         self.matr = self.ground.matrix_gro()
         self.ms = Current_Screen(self.matr)
         self.player_y_coord = self.get_coord(self.matr, settings.PLAYER_START_X)
@@ -34,7 +32,7 @@ class Main_Screen:
         self.tk_window = None
 
     def get_background(self, name):
-        image = pygame.image.load(join("assets", "Background", name))
+        image = pygame.image.load(join("../assets", "Background", name))
         _, _, width, height = image.get_rect()
         tiles = []
         for i in range(settings.WIDTH // width + 1):
@@ -162,8 +160,6 @@ class Main_Screen:
             self.mouse_y = event.pos[1] // settings.BLOCK_SIZE
         if event.type == pygame.QUIT:
             self.run = False
-
-
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and self.player.jump_count < 2:
                 self.player.jump()
@@ -172,14 +168,12 @@ class Main_Screen:
             if pygame.K_0 <= event.key <= pygame.K_9:
                 index = event.key - pygame.K_0
                 self.inventory.select_index = index
-
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 self.mouse_pressed = True
                 self.press_start_time = pygame.time.get_ticks()
             elif event.button == 3:
                 self.put_block()
-
         if event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 self.mouse_pressed = False

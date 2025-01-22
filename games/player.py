@@ -2,7 +2,7 @@ from os import listdir
 from os.path import isfile, join
 import pygame
 
-from settings import Settings
+from main_functions.settings import Settings
 
 pygame.init()
 
@@ -17,7 +17,7 @@ def flip(sprites):
 
 
 def load_sprite_sheets(dir1, dir2, width, height, direction=False):
-    path = join("assets", dir1, dir2)
+    path = join("../assets", dir1, dir2)
     images = [f for f in listdir(path) if isfile(join(path, f))]
 
     all_sprites = {}

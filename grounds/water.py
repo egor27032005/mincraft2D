@@ -1,12 +1,8 @@
-import math
-import time
-
 import pygame
 
-from block import Object
-from settings import Settings
-from os import listdir
-from os.path import isfile, join
+from grounds.block import Object
+from main_functions.settings import Settings
+from os.path import join
 
 pygame.init()
 
@@ -16,7 +12,7 @@ settings = Settings()
 
 
 def get_water_block(size, name):
-    path = join("assets", "Water", name)
+    path = join("../assets", "Water", name)
     image = pygame.image.load(path).convert_alpha()
     surface = pygame.Surface((size, size), pygame.SRCALPHA, 32)
     rect = pygame.Rect(0, 0, size, size)

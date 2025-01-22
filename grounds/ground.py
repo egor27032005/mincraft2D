@@ -1,7 +1,6 @@
-import random
-from block import Block, settings
-from ground_matrix import *
-from Perlin import *
+from grounds.block import settings
+from grounds.Perlin import *
+from grounds.ground_matrix import Ground_Matrix
 
 
 class Ground:

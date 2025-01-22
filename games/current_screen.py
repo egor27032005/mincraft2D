@@ -1,6 +1,6 @@
 
-from water import *
-from block import *
+from grounds.water import *
+from grounds.block import *
 
 settings = Settings()
 

@@ -1,11 +1,7 @@
-import math
-from shlex import join
-
 import pygame
 import pygame as pg
 
-from block import Object
-from settings import Settings
+from main_functions.settings import Settings
 
 settings = Settings()
 
@@ -19,7 +15,7 @@ class Cursor():
         self.y = y
         self.images = []
         for i in range(0, 11):
-            self.images.append(pg.image.load(f'assets/images/cursor/{i}.png'))
+            self.images.append(pg.image.load(f'../assets/images/cursor/{i}.PNG'))
         self.time = time // 100
         self.player = player
         self.x_coord, self.y_coord = self.case_switch()

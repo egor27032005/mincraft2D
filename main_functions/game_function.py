@@ -1,7 +1,6 @@
-import pygame
 import pygame as pg
 
-from game import Game
+from main_functions.game import Game
 from stats import Stats
 
 class GameFunctions:
